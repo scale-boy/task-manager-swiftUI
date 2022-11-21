@@ -14,6 +14,9 @@ struct Home: View {
     // MARK: Matched Geometry Namespace
     @Namespace var animation
     
+    // MARK: All Enviroment Values in one Variable
+    @Environment(\.self) var env
+    
     // MARK: Matched Fetching Task
     @FetchRequest(entity: Task.entity(),
                   sortDescriptors: [NSSortDescriptor(keyPath: \Task.deadline, ascending: false)],
@@ -97,7 +100,9 @@ struct Home: View {
                 // MARK: Edit button only for non completed tasks
                 if !task.isCompleted {
                     Button {
-                        
+                        taskModel.editTask = task
+                        taskModel.openEditTask = true
+                        taskModel.setupTask()
                     } label: {
                         Image(systemName: "square.and.pencil")
                             .foregroundColor(.black)
@@ -130,7 +135,9 @@ struct Home: View {
                 
                 if !task.isCompleted {
                     Button {
-                        
+                        // MARK: Update Core Data
+                        task.isCompleted.toggle()
+                        try? env.managedObjectContext.save()
                     } label: {
                         Circle()
                             .strokeBorder(.black, lineWidth: 1.5)

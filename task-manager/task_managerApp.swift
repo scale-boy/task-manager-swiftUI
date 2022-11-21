@@ -3,7 +3,7 @@
 //  task-manager
 //
 //  Created by nguyen.van.thuanc on 18/11/2022.
-//
+// https://www.youtube.com/watch?v=x8h6hTqo2So&t=310s = 23:11
 
 import SwiftUI
 

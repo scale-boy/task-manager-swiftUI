@@ -19,9 +19,21 @@ class TaskViewModel: ObservableObject {
     @Published var taskType: String = "Basic"
     @Published var showDatePicker: Bool = false
     
+    // MARK: Editting Task
+    @Published var editTask: Task?
+    
     // MARK: Adding Task To Core Data
     func addTask(context: NSManagedObjectContext) -> Bool {
-        let task = Task(context: context)
+        var task: Task?
+        
+        if let editTask = editTask {
+            task = editTask
+        } else {
+            task = Task(context: context)
+        }
+        
+        guard let task = task else { return false }
+        
         task.title = taskTitle
         task.color = taskColor
         task.deadline = taskDeadline
@@ -40,5 +52,13 @@ class TaskViewModel: ObservableObject {
         taskColor = "Yellow"
         taskTitle = ""
         taskDeadline = Date()
+    }
+    
+    // MARK: If Editing Task Is Available then Setting Existing Data
+    func setupTask() {
+        taskTitle = editTask?.title ?? ""
+        taskColor = editTask?.color ?? "Yellow"
+        taskType =  editTask?.type ?? "Bassic"
+        taskDeadline = editTask?.deadline ?? Date()
     }
 }
